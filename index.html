@@ -12,7 +12,7 @@
     }
 
     body {
-      background-color: #fce4ec;
+      background-color: #fce4ec; /* Sfondo rosa chiaro */
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
       justify-content: center;
@@ -25,7 +25,7 @@
       text-align: center;
       position: relative;
       width: 100%;
-      max-width: 400px;
+      max-width: 450px;
       padding: 20px;
     }
 
@@ -36,55 +36,48 @@
     }
 
     .envelope-box:hover {
-      transform: scale(1.05);
+      transform: scale(1.03);
     }
 
+    /* Ombra sfumata rosa scuro attorno alla busta PNG trasparente */
     .envelope-img {
-      width: 250px;
+      width: 280px;
       height: auto;
       display: block;
       margin: 0 auto;
+      filter: drop-shadow(0px 8px 15px rgba(216, 27, 96, 0.45));
     }
 
     .click-hint {
-      margin-top: 15px;
+      margin-top: 20px;
       color: #d81b60;
-      font-size: 1rem;
+      font-size: 1.1rem;
       font-weight: 600;
       animation: pulse 1.5s infinite;
     }
 
-    /* Foglio della lettera */
-    .letter-card {
+    /* Immagine della lettera che appare sotto */
+    .letter-image-container {
       display: none;
-      background: #ffffff;
-      border-radius: 12px;
-      padding: 25px 20px;
-      margin-top: 20px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-      border: 2px dashed #f48fb1;
+      margin-top: 25px;
       opacity: 0;
       transform: translateY(20px);
-      transition: all 0.5s ease-out;
+      transition: all 0.6s ease-out;
     }
 
-    .letter-card.show {
+    .letter-image-container.show {
       display: block;
       opacity: 1;
       transform: translateY(0);
     }
 
-    .letter-card h1 {
-      color: #c2185b;
-      font-size: 1.6rem;
-      margin-bottom: 15px;
-    }
-
-    .letter-card p {
-      color: #4a4a4a;
-      font-size: 1rem;
-      line-height: 1.6;
-      white-space: pre-line;
+    .letter-img {
+      width: 100%;
+      max-width: 380px;
+      height: auto;
+      border-radius: 12px;
+      /* Ombra morbida per il foglio scritto */
+      filter: drop-shadow(0px 6px 12px rgba(216, 27, 96, 0.3));
     }
 
     @keyframes pulse {
@@ -103,17 +96,9 @@
       <p class="click-hint" id="clickHint">✨ Clicca la busta per aprirla ✨</p>
     </div>
 
-    <!-- Messaggio di Auguri -->
-    <div class="letter-card" id="letterCard">
-      <h1>Tanti Auguri! 🎉</h1>
-      <p>
-        Cara amica mia,
-        
-        Tanti auguri di buon compleanno! 🎈
-        Spero che questa giornata speciale ti porti tantissima felicità. 
-
-        Grazie per ogni singolo momento passato insieme! ✨
-      </p>
+    <!-- Immagine del foglio con la scritta degli auguri -->
+    <div class="letter-image-container" id="letterContainer">
+      <img src="lettera.png" alt="Lettera di Auguri" class="letter-img">
     </div>
   </div>
 
@@ -121,21 +106,21 @@
     function openLetter() {
       const img = document.getElementById('envelopeImg');
       const hint = document.getElementById('clickHint');
-      const letter = document.getElementById('letterCard');
+      const letter = document.getElementById('letterContainer');
       const box = document.getElementById('envelopeBox');
 
-      // Cambia immagine della busta
+      // Cambia la busta in aperta
       img.src = 'aperta.png';
       
-      // Nasconde il testo di suggerimento e disabilita il click
+      // Nasconde la scritta di suggerimento
       hint.style.display = 'none';
       box.onclick = null;
       box.style.cursor = 'default';
 
-      // Mostra la lettera con effetto
+      // Mostra l'immagine del foglio scritto
       setTimeout(() => {
         letter.classList.add('show');
-      }, 300);
+      }, 350);
     }
   </script>
 
