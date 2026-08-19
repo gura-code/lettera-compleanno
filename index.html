@@ -9,30 +9,48 @@
             width: 100%; height: 100vh; 
             overflow: hidden; 
             display: flex; justify-content: center; align-items: center; 
-            /* Sfondo rosa chiaro, chiarissimo e morbidissimo */
             background-color: #faf5f3; 
             font-family: sans-serif;
         }
 
-        /* Ombra un po' più morbida e visibile per far risaltare la carta */
-        .image-shadow {
-            filter: drop-shadow(0 6px 16px rgba(150, 115, 105, 0.16));
+        /* Pattern geometrico a rombi con i fioretti piccoli sulla prima pagina */
+        #state-closed {
+            position: absolute;
+            width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: opacity 0.6s ease;
+            z-index: 10;
+            /* Crea il pattern a rombi ripetuti con il fiore (30px di dimensione per farli piccoli) */
+            background-image: url('flower.png');
+            background-repeat: repeat;
+            background-size: 60px 60px; /* Distanza del ripetersi del rombo */
+            background-position: 0 0, 30px 30px;
+        }
+
+        /* Scritta dolce sopra la busta nella prima pagina */
+        .cover-text {
+            font-size: 18px;
+            color: #b5838d;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+            font-weight: 500;
+            background-color: rgba(250, 245, 243, 0.9);
+            padding: 6px 16px;
+            border-radius: 20px;
         }
 
         /* Animazione Pulse per la busta chiusa */
         @keyframes pulseZoom {
             0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.03); }
             100% { transform: scale(1); }
         }
-
-        #state-closed {
-            cursor: pointer;
-            transition: opacity 0.6s ease;
-            z-index: 10;
-        }
         .breathing { animation: pulseZoom 2.5s infinite ease-in-out; }
-        #envelope-closed { width: 250px; }
+        #envelope-closed { width: 240px; }
 
         /* Pagina 2: Layout fisso */
         #state-open { 
@@ -45,7 +63,7 @@
             z-index: 5;
         }
 
-        /* Messaggio: sale dal basso con ombra */
+        /* Messaggio: sale dal basso */
         .message-card-img { 
             width: 300px; 
             max-width: 80vw; 
@@ -55,7 +73,7 @@
             transition: opacity 0.9s cubic-bezier(0.25, 1, 0.5, 1), transform 0.9s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* Busta aperta con ombra */
+        /* Busta aperta */
         .envelope-open-img { 
             width: 280px; 
             max-width: 75vw; 
@@ -75,15 +93,16 @@
 </head>
 <body>
 
-    <!-- Pagina 1 -->
+    <!-- Pagina 1 con pattern a rombi di fioretti e scritta -->
     <div id="state-closed" class="breathing" onclick="openLetter()">
-        <img src="envelope-closed.png" id="envelope-closed" class="image-shadow" alt="Busta chiusa">
+        <div class="cover-text">Una sorpresa per te...</div>
+        <img src="envelope-closed.png" id="envelope-closed" alt="Busta chiusa">
     </div>
 
     <!-- Pagina 2 -->
     <div id="state-open">
-        <img src="message-card.png" class="message-card-img image-shadow" alt="Messaggio">
-        <img src="envelope-open.png" class="envelope-open-img image-shadow" alt="Busta aperta">
+        <img src="message-card.png" class="message-card-img" alt="Messaggio">
+        <img src="envelope-open.png" class="envelope-open-img" alt="Busta aperta">
     </div>
 
     <script>
