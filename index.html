@@ -13,7 +13,7 @@
             font-family: sans-serif;
         }
 
-        /* Prima pagina con pattern a rombi molto chiaro e distanziato */
+        /* Pagina 1: Fissa, immobile, con i fioretti di sfondo */
         #state-closed {
             position: absolute;
             width: 100%; height: 100%;
@@ -23,21 +23,9 @@
             cursor: pointer;
             transition: opacity 0.6s ease;
             z-index: 10;
-            background-image: url('flower.gif');
-            background-repeat: repeat;
-            /* Fiori più grandi e distanziati (rombi larghi) */
-            background-size: 140px 140px;
-            background-position: 0 0, 70px 70px;
-            /* Molto chiari e delicati */
-            opacity: 0.85; 
         }
 
-        /* Rende l'immagine della GIF stessa molto chiara e morbida sullo sfondo */
-        #state-closed img {
-            opacity: 1; /* La busta resta ben visibile */
-        }
-        
-        /* Trucco per rendere trasparenti i fioretti del pattern */
+        /* Livello separato per il pattern di fiori (immobile) */
         #state-closed::before {
             content: "";
             position: absolute;
@@ -46,20 +34,25 @@
             background-repeat: repeat;
             background-size: 140px 140px;
             background-position: 0 0, 70px 70px;
-            opacity: 0.2; /* Molto chiaro, non affolla la pagina */
+            opacity: 0.18; /* Molto leggero e chiaro */
             pointer-events: none;
         }
 
-        /* Animazione Pulse per la busta chiusa */
+        /* Animazione Pulse applicata SOLO alla busta, lo sfondo resta fermo */
         @keyframes pulseZoom {
             0% { transform: scale(1); }
             50% { transform: scale(1.03); }
             100% { transform: scale(1); }
         }
         .breathing { animation: pulseZoom 2.5s infinite ease-in-out; }
-        #envelope-closed { width: 240px; position: relative; z-index: 2; }
+        
+        #envelope-closed { 
+            width: 240px; 
+            position: relative; 
+            z-index: 2; 
+        }
 
-        /* Pagina 2: Layout fisso */
+        /* Pagina 2: Sfondo pulito senza fiori, per non sovraccaricare */
         #state-open { 
             display: none; 
             flex-direction: column;
@@ -100,12 +93,12 @@
 </head>
 <body>
 
-    <!-- Pagina 1: Busta chiusa con pattern di fioretti chiari e distanziati, senza scritte -->
-    <div id="state-closed" class="breathing" onclick="openLetter()">
-        <img src="envelope-closed.png" id="envelope-closed" alt="Busta chiusa">
+    <!-- Pagina 1: Sfondo immobile con fiori chiari, solo la busta respira -->
+    <div id="state-closed" onclick="openLetter()">
+        <img src="envelope-closed.png" id="envelope-closed" class="breathing" alt="Busta chiusa">
     </div>
 
-    <!-- Pagina 2 -->
+    <!-- Pagina 2: Pulita, senza fiori -->
     <div id="state-open">
         <img src="message-card.png" class="message-card-img" alt="Messaggio">
         <img src="envelope-open.png" class="envelope-open-img" alt="Busta aperta">
@@ -117,7 +110,6 @@
             const open = document.getElementById('state-open');
 
             closed.style.opacity = '0';
-            closed.classList.remove('breathing');
 
             setTimeout(() => {
                 closed.style.display = 'none';
@@ -131,4 +123,3 @@
     </script>
 </body>
 </html>
-
