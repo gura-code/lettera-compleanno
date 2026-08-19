@@ -4,70 +4,130 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        /* Imposta il colore di sfondo su tutta la pagina */
         body, html { 
             margin: 0; padding: 0; 
-            min-height: 100vh; /* Permette lo scroll se serve */
-            display: flex; flex-direction: column; 
-            justify-content: center; align-items: center; 
-            background-color: #fdf6f0; 
+            min-height: 100vh; 
+            display: flex; justify-content: center; align-items: center; 
+            background-color: #f4ece8; 
             font-family: sans-serif;
+            overflow-x: hidden;
         }
 
-        /* Animazione "Respiro" per la busta */
-        @keyframes pulse {
+        /* Animazione Zoom continuo per la prima busta */
+        @keyframes pulseZoom {
             0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.08); }
             100% { transform: scale(1); }
         }
-        .breathing { animation: pulse 3s infinite ease-in-out; }
 
-        /* Sticker sfumati e sparsi */
-        .sticker { 
-            position: absolute; width: 80px; 
-            opacity: 0.3; /* Leggermente trasparente */
-            z-index: 0; 
+        .clickable-envelope {
+            animation: pulseZoom 2.5s infinite ease-in-out;
+            cursor: pointer;
+            z-index: 10;
         }
 
-        /* Contenitore principale */
-        #main-container { z-index: 10; display: flex; flex-direction: column; align-items: center; }
-        
-        #state-closed { cursor: pointer; }
-        #state-open { display: none; text-align: center; }
+        /* Sticker posizionati ai lati e nascosti all'inizio */
+        .background-stickers {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            z-index: 1;
+        }
 
-        /* Immagini più grandi */
-        .envelope-img { max-width: 85vw; width: 350px; }
-        .message-img { max-width: 90vw; width: 400px; margin-top: -20px; }
+        .sticker { 
+            position: absolute; 
+            width: 75px; 
+            opacity: 0.35; 
+        }
+
+        /* Posizioni ben distanziate */
+        .st-top-left { top: 6%; left: 6%; }
+        .st-top-right { top: 6%; right: 6%; }
+        .st-bottom-left { bottom: 6%; left: 6%; }
+        .st-bottom-right { bottom: 6%; right: 6%; }
+
+        /* Contenitore seconda pagina */
+        #state-open { 
+            display: none; 
+            position: relative; 
+            z-index: 10; 
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        #state-open.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .envelope-open-img { 
+            width: 320px; 
+            max-width: 85vw; 
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Il biglietto va a sovrapporsi leggermente sopra la busta aperta */
+        .message-card-img { 
+            width: 340px; 
+            max-width: 90vw; 
+            margin-top: -110px; 
+            position: relative;
+            z-index: 3;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            border-radius: 12px;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Sticker sparsi ovunque -->
-    <img src="cake-sticker.png" class="sticker" style="top: 5%; left: 5%;">
-    <img src="cake-sticker.png" class="sticker" style="top: 15%; right: 10%;">
-    <img src="cake-sticker.png" class="sticker" style="bottom: 10%; left: 15%;">
-    <img src="cake-sticker.png" class="sticker" style="bottom: 20%; right: 5%;">
-    <img src="cake-sticker.png" class="sticker" style="top: 40%; left: 80%;">
-    <img src="cake-sticker.png" class="sticker" style="top: 60%; left: 10%;">
+    <!-- Sticker (nascosti nella pagina iniziale) -->
+    <div id="stickers-container" class="background-stickers">
+        <img src="cake-sticker.png" class="sticker st-top-left" alt="Sticker">
+        <img src="cake-sticker.png" class="sticker st-top-right" alt="Sticker">
+        <img src="cake-sticker.png" class="sticker st-bottom-left" alt="Sticker">
+        <img src="cake-sticker.png" class="sticker st-bottom-right" alt="Sticker">
+    </div>
 
-    <div id="main-container">
-        <!-- Stato 1: Busta chiusa con effetto respiro -->
-        <div id="state-closed" class="breathing" onclick="openEnvelope()">
-            <img src="envelope-closed.png" class="envelope-img" alt="Busta chiusa">
-        </div>
+    <!-- Stato 1: Busta chiusa -->
+    <div id="state-closed" class="clickable-envelope" onclick="openLetter()">
+        <img src="envelope-closed.png" style="width: 300px; max-width: 80vw;" alt="Busta chiusa">
+    </div>
 
-        <!-- Stato 2: Busta aperta -->
-        <div id="state-open">
-            <img src="envelope-open.png" class="envelope-img" alt="Busta aperta">
-            <br>
-            <img src="message-card.png" class="message-img" alt="Messaggio">
-        </div>
+    <!-- Stato 2: Busta aperta e messaggio -->
+    <div id="state-open">
+        <img src="envelope-open.png" class="envelope-open-img" alt="Busta aperta">
+        <img src="message-card.png" class="message-card-img" alt="Messaggio">
     </div>
 
     <script>
-        function openEnvelope() {
-            document.getElementById('state-closed').style.display = 'none';
-            document.getElementById('state-open').style.display = 'block';
+        function openLetter() {
+            const closedState = document.getElementById('state-closed');
+            const openState = document.getElementById('state-open');
+            const stickers = document.getElementById('stickers-container');
+
+            // Transizione di uscita della prima busta
+            closedState.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            closedState.style.opacity = '0';
+            closedState.style.transform = 'scale(0.9)';
+
+            setTimeout(() => {
+                closedState.style.display = 'none';
+                
+                // Attiva la seconda vista
+                openState.classList.add('active');
+                
+                // Fa apparire gli sticker con dissolvenza
+                stickers.style.opacity = '1';
+            }, 500);
         }
     </script>
 </body>
