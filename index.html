@@ -1,129 +1,55 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tanti Auguri!</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    <meta charset="UTF-8">
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; display: flex; justify-content: center; align-items: center; background-color: #fdf6f0; transition: background 0.5s; }
+        
+        /* Contenitore per gli sticker che fluttuano */
+        #background-stickers { position: absolute; width: 100%; height: 100%; overflow: hidden; z-index: 0; opacity: 0; transition: opacity 0.5s; }
+        .sticker { position: absolute; width: 100px; animation: float 3s ease-in-out infinite; }
+        
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0px); } }
 
-    body {
-      background-color: #fce4ec; /* Sfondo rosa chiaro */
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    .container {
-      text-align: center;
-      position: relative;
-      width: 100%;
-      max-width: 450px;
-      padding: 20px;
-    }
-
-    .envelope-box {
-      cursor: pointer;
-      display: inline-block;
-      transition: transform 0.2s ease;
-    }
-
-    .envelope-box:hover {
-      transform: scale(1.03);
-    }
-
-    /* Ombra sfumata rosa scuro attorno alla busta PNG trasparente */
-    .envelope-img {
-      width: 280px;
-      height: auto;
-      display: block;
-      margin: 0 auto;
-      filter: drop-shadow(0px 8px 15px rgba(216, 27, 96, 0.45));
-    }
-
-    .click-hint {
-      margin-top: 20px;
-      color: #d81b60;
-      font-size: 1.1rem;
-      font-weight: 600;
-      animation: pulse 1.5s infinite;
-    }
-
-    /* Immagine della lettera che appare sotto */
-    .letter-image-container {
-      display: none;
-      margin-top: 25px;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.6s ease-out;
-    }
-
-    .letter-image-container.show {
-      display: block;
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .letter-img {
-      width: 100%;
-      max-width: 380px;
-      height: auto;
-      border-radius: 12px;
-      /* Ombra morbida per il foglio scritto */
-      filter: drop-shadow(0px 6px 12px rgba(216, 27, 96, 0.3));
-    }
-
-    @keyframes pulse {
-      0% { opacity: 0.6; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.03); }
-      100% { opacity: 0.6; transform: scale(1); }
-    }
-  </style>
+        /* Contenitori per le fasi */
+        #state-closed { cursor: pointer; z-index: 10; }
+        #state-open { display: none; position: relative; z-index: 10; text-align: center; }
+        
+        img { max-width: 300px; }
+        #message-card { margin-top: -150px; } /* Posiziona il biglietto sopra la busta */
+    </style>
 </head>
 <body>
 
-  <div class="container">
-    <!-- Busta Cliccabile -->
-    <div class="envelope-box" id="envelopeBox" onclick="openLetter()">
-      <img id="envelopeImg" src="chiusa.png" alt="Busta Lettera" class="envelope-img">
-      <p class="click-hint" id="clickHint">✨ Clicca la busta per aprirla ✨</p>
+    <!-- Sfondo con sticker che appaiono dopo -->
+    <div id="background-stickers">
+        <img src="cake-sticker.png" class="sticker" style="top: 10%; left: 10%;">
+        <img src="cake-sticker.png" class="sticker" style="top: 20%; right: 15%; animation-delay: 1s;">
+        <img src="cake-sticker.png" class="sticker" style="bottom: 10%; left: 20%; animation-delay: 2s;">
     </div>
 
-    <!-- Immagine del foglio con la scritta degli auguri -->
-    <div class="letter-image-container" id="letterContainer">
-      <img src="lettera.png" alt="Lettera di Auguri" class="letter-img">
+    <!-- Stato 1: Busta chiusa -->
+    <div id="state-closed" onclick="openEnvelope()">
+        <img src="envelope-closed.png" alt="Busta chiusa">
     </div>
-  </div>
 
-  <script>
-    function openLetter() {
-      const img = document.getElementById('envelopeImg');
-      const hint = document.getElementById('clickHint');
-      const letter = document.getElementById('letterContainer');
-      const box = document.getElementById('envelopeBox');
+    <!-- Stato 2: Busta aperta -->
+    <div id="state-open">
+        <img src="envelope-open.png" alt="Busta aperta">
+        <br>
+        <img src="message-card.png" id="message-card" alt="Messaggio">
+    </div>
 
-      // Cambia la busta in aperta
-      img.src = 'aperta.png';
-      
-      // Nasconde la scritta di suggerimento
-      hint.style.display = 'none';
-      box.onclick = null;
-      box.style.cursor = 'default';
-
-      // Mostra l'immagine del foglio scritto
-      setTimeout(() => {
-        letter.classList.add('show');
-      }, 350);
-    }
-  </script>
-
+    <script>
+        function openEnvelope() {
+            // Nasconde la busta chiusa
+            document.getElementById('state-closed').style.display = 'none';
+            // Mostra la busta aperta
+            document.getElementById('state-open').style.display = 'block';
+            // Cambia sfondo (schiarisce) e mostra gli sticker
+            document.body.style.backgroundColor = "#ffffff";
+            document.getElementById('background-stickers').style.opacity = "0.4";
+        }
+    </script>
 </body>
 </html>
-
