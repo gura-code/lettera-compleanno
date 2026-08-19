@@ -2,53 +2,72 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; display: flex; justify-content: center; align-items: center; background-color: #fdf6f0; transition: background 0.5s; }
-        
-        /* Contenitore per gli sticker che fluttuano */
-        #background-stickers { position: absolute; width: 100%; height: 100%; overflow: hidden; z-index: 0; opacity: 0; transition: opacity 0.5s; }
-        .sticker { position: absolute; width: 100px; animation: float 3s ease-in-out infinite; }
-        
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0px); } }
+        /* Imposta il colore di sfondo su tutta la pagina */
+        body, html { 
+            margin: 0; padding: 0; 
+            min-height: 100vh; /* Permette lo scroll se serve */
+            display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; 
+            background-color: #fdf6f0; 
+            font-family: sans-serif;
+        }
 
-        /* Contenitori per le fasi */
-        #state-closed { cursor: pointer; z-index: 10; }
-        #state-open { display: none; position: relative; z-index: 10; text-align: center; }
+        /* Animazione "Respiro" per la busta */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .breathing { animation: pulse 3s infinite ease-in-out; }
+
+        /* Sticker sfumati e sparsi */
+        .sticker { 
+            position: absolute; width: 80px; 
+            opacity: 0.3; /* Leggermente trasparente */
+            z-index: 0; 
+        }
+
+        /* Contenitore principale */
+        #main-container { z-index: 10; display: flex; flex-direction: column; align-items: center; }
         
-        img { max-width: 300px; }
-        #message-card { margin-top: -150px; } /* Posiziona il biglietto sopra la busta */
+        #state-closed { cursor: pointer; }
+        #state-open { display: none; text-align: center; }
+
+        /* Immagini più grandi */
+        .envelope-img { max-width: 85vw; width: 350px; }
+        .message-img { max-width: 90vw; width: 400px; margin-top: -20px; }
     </style>
 </head>
 <body>
 
-    <!-- Sfondo con sticker che appaiono dopo -->
-    <div id="background-stickers">
-        <img src="cake-sticker.png" class="sticker" style="top: 10%; left: 10%;">
-        <img src="cake-sticker.png" class="sticker" style="top: 20%; right: 15%; animation-delay: 1s;">
-        <img src="cake-sticker.png" class="sticker" style="bottom: 10%; left: 20%; animation-delay: 2s;">
-    </div>
+    <!-- Sticker sparsi ovunque -->
+    <img src="cake-sticker.png" class="sticker" style="top: 5%; left: 5%;">
+    <img src="cake-sticker.png" class="sticker" style="top: 15%; right: 10%;">
+    <img src="cake-sticker.png" class="sticker" style="bottom: 10%; left: 15%;">
+    <img src="cake-sticker.png" class="sticker" style="bottom: 20%; right: 5%;">
+    <img src="cake-sticker.png" class="sticker" style="top: 40%; left: 80%;">
+    <img src="cake-sticker.png" class="sticker" style="top: 60%; left: 10%;">
 
-    <!-- Stato 1: Busta chiusa -->
-    <div id="state-closed" onclick="openEnvelope()">
-        <img src="envelope-closed.png" alt="Busta chiusa">
-    </div>
+    <div id="main-container">
+        <!-- Stato 1: Busta chiusa con effetto respiro -->
+        <div id="state-closed" class="breathing" onclick="openEnvelope()">
+            <img src="envelope-closed.png" class="envelope-img" alt="Busta chiusa">
+        </div>
 
-    <!-- Stato 2: Busta aperta -->
-    <div id="state-open">
-        <img src="envelope-open.png" alt="Busta aperta">
-        <br>
-        <img src="message-card.png" id="message-card" alt="Messaggio">
+        <!-- Stato 2: Busta aperta -->
+        <div id="state-open">
+            <img src="envelope-open.png" class="envelope-img" alt="Busta aperta">
+            <br>
+            <img src="message-card.png" class="message-img" alt="Messaggio">
+        </div>
     </div>
 
     <script>
         function openEnvelope() {
-            // Nasconde la busta chiusa
             document.getElementById('state-closed').style.display = 'none';
-            // Mostra la busta aperta
             document.getElementById('state-open').style.display = 'block';
-            // Cambia sfondo (schiarisce) e mostra gli sticker
-            document.body.style.backgroundColor = "#ffffff";
-            document.getElementById('background-stickers').style.opacity = "0.4";
         }
     </script>
 </body>
