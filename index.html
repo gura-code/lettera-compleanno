@@ -13,34 +13,41 @@
             font-family: sans-serif;
         }
 
-        /* Pattern geometrico a rombi con la GIF del fiore sulla prima pagina */
+        /* Prima pagina con pattern a rombi molto chiaro e distanziato */
         #state-closed {
             position: absolute;
             width: 100%; height: 100%;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             cursor: pointer;
             transition: opacity 0.6s ease;
             z-index: 10;
-            /* Usa la GIF come pattern geometrico a rombi */
             background-image: url('flower.gif');
             background-repeat: repeat;
-            background-size: 60px 60px;
-            background-position: 0 0, 30px 30px;
+            /* Fiori più grandi e distanziati (rombi larghi) */
+            background-size: 140px 140px;
+            background-position: 0 0, 70px 70px;
+            /* Molto chiari e delicati */
+            opacity: 0.85; 
         }
 
-        /* Scritta dolce sopra la busta nella prima pagina */
-        .cover-text {
-            font-size: 18px;
-            color: #b5838d;
-            margin-bottom: 25px;
-            letter-spacing: 1px;
-            font-weight: 500;
-            background-color: rgba(250, 245, 243, 0.9);
-            padding: 6px 16px;
-            border-radius: 20px;
+        /* Rende l'immagine della GIF stessa molto chiara e morbida sullo sfondo */
+        #state-closed img {
+            opacity: 1; /* La busta resta ben visibile */
+        }
+        
+        /* Trucco per rendere trasparenti i fioretti del pattern */
+        #state-closed::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('flower.gif');
+            background-repeat: repeat;
+            background-size: 140px 140px;
+            background-position: 0 0, 70px 70px;
+            opacity: 0.2; /* Molto chiaro, non affolla la pagina */
+            pointer-events: none;
         }
 
         /* Animazione Pulse per la busta chiusa */
@@ -50,7 +57,7 @@
             100% { transform: scale(1); }
         }
         .breathing { animation: pulseZoom 2.5s infinite ease-in-out; }
-        #envelope-closed { width: 240px; }
+        #envelope-closed { width: 240px; position: relative; z-index: 2; }
 
         /* Pagina 2: Layout fisso */
         #state-open { 
@@ -93,9 +100,8 @@
 </head>
 <body>
 
-    <!-- Pagina 1 con pattern a rombi di fioretti (GIF) e scritta -->
+    <!-- Pagina 1: Busta chiusa con pattern di fioretti chiari e distanziati, senza scritte -->
     <div id="state-closed" class="breathing" onclick="openLetter()">
-        <div class="cover-text">Una sorpresa per te...</div>
         <img src="envelope-closed.png" id="envelope-closed" alt="Busta chiusa">
     </div>
 
