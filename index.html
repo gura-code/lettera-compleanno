@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Un piccolo promemoria</title>
     <style>
         body, html { 
             margin: 0; padding: 0; 
@@ -13,22 +14,30 @@
             overflow-x: hidden;
         }
 
-        /* Animazione Pulse fluida */
+        /* Ombra per le immagini */
+        .shadow-img {
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15); /* Ombra morbida ma scura */
+            border-radius: 8px; /* Arrotonda leggermente gli angoli per l'ombra */
+        }
+
+        /* Animazione Pulse per la busta chiusa */
         @keyframes pulseZoom {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
 
-        /* Contenitore busta chiusa con padding per evitare tagli */
+        /* Contenitore busta chiusa (Pagina 1) */
         #state-closed {
             padding: 40px; 
             cursor: pointer;
             transition: opacity 0.8s ease;
+            z-index: 10;
         }
         .breathing { animation: pulseZoom 2.5s infinite ease-in-out; }
+        #envelope-closed { width: 250px; }
 
-        /* Sticker (nascosti all'inizio) */
+        /* Sticker di sfondo (Pagina 2) */
         .background-stickers {
             position: fixed; top: 0; left: 0;
             width: 100vw; height: 100vh;
@@ -41,23 +50,39 @@
         .st-tl { top: 5%; left: 5%; } .st-tr { top: 5%; right: 5%; }
         .st-bl { bottom: 5%; left: 5%; } .st-br { bottom: 5%; right: 5%; }
 
-        /* Seconda pagina: Layout ordinato senza sovrapposizioni */
+        /* Pagina 2: Layout in colonna con Messaggio in alto */
         #state-open { 
             display: none; 
             flex-direction: column;
             align-items: center;
-            gap: 20px; /* Spazio tra busta e messaggio */
+            justify-content: center;
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 0.8s ease, transform 0.8s ease;
+            z-index: 5;
+            min-height: 100vh;
+            width: 100%;
         }
 
-        .envelope-open-img { width: 300px; max-width: 80vw; }
-        .message-card-img { width: 320px; max-width: 85vw; }
+        /* Il biglietto del messaggio (ORA IN ALTO) */
+        .message-card-img { 
+            width: 320px; 
+            max-width: 85vw; 
+            margin-bottom: 20px; /* Spazio sotto il biglietto */
+            margin-top: 20px; /* Margine superiore se scrolla */
+        }
+
+        /* La busta aperta (ORA IN BASSO) */
+        .envelope-open-img { 
+            width: 300px; 
+            max-width: 80vw; 
+            margin-bottom: 20px; /* Margine inferiore se scrolla */
+        }
     </style>
 </head>
 <body>
 
+    <!-- Container Sticker (invisibile all'inizio) -->
     <div id="stickers-container" class="background-stickers">
         <img src="cake-sticker.png" class="sticker st-tl" alt="Sticker">
         <img src="cake-sticker.png" class="sticker st-tr" alt="Sticker">
@@ -65,15 +90,17 @@
         <img src="cake-sticker.png" class="sticker st-br" alt="Sticker">
     </div>
 
-    <!-- Pagina 1 -->
+    <!-- Pagina 1: Busta chiusa con animazione e ombra -->
     <div id="state-closed" class="breathing" onclick="openLetter()">
-        <img src="envelope-closed.png" style="width: 250px;" alt="Busta chiusa">
+        <img src="envelope-closed.png" id="envelope-closed" class="shadow-img" alt="Busta chiusa">
     </div>
 
-    <!-- Pagina 2 -->
+    <!-- Pagina 2: Busta aperta e messaggio con ombre -->
     <div id="state-open">
-        <img src="envelope-open.png" class="envelope-open-img" alt="Busta aperta">
-        <img src="message-card.png" class="message-card-img" alt="Messaggio">
+        <!-- Messaggio sopra con ombra -->
+        <img src="message-card.png" class="message-card-img shadow-img" alt="Messaggio">
+        <!-- Busta aperta sotto con ombra -->
+        <img src="envelope-open.png" class="envelope-open-img shadow-img" alt="Busta aperta">
     </div>
 
     <script>
@@ -89,15 +116,16 @@
             setTimeout(() => {
                 closed.style.display = 'none';
                 
-                // 2. Mostra pagina 2
+                // 2. Prepara pagina 2 (Flexbox)
                 open.style.display = 'flex';
-                // Piccola pausa per attivare la transizione CSS
+                
+                // 3. Piccola pausa per attivare la transizione CSS di entrata
                 setTimeout(() => {
                     open.style.opacity = '1';
                     open.style.transform = 'translateY(0)';
-                    stickers.style.opacity = '1';
+                    stickers.style.opacity = '1'; // Sticker di sfondo appaiono
                 }, 50);
-            }, 800); // Sincronizzato con la durata della transizione
+            }, 800); // Sincronizzato con la durata della transizione CSS
         }
     </script>
 </body>
