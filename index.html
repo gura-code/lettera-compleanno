@@ -13,20 +13,17 @@
             font-family: sans-serif;
         }
 
-        /* Pagina 1: Fissa, immobile, con i fioretti di sfondo */
-        #state-closed {
+        /* Stile comune per lo sfondo con i fioretti chiari e immobili su entrambe le pagine */
+        .page-background {
             position: absolute;
             width: 100%; height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            cursor: pointer;
-            transition: opacity 0.6s ease;
-            z-index: 10;
+            top: 0; left: 0;
         }
 
-        /* Livello separato per il pattern di fiori (immobile) */
-        #state-closed::before {
+        .page-background::before {
             content: "";
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -34,11 +31,18 @@
             background-repeat: repeat;
             background-size: 140px 140px;
             background-position: 0 0, 70px 70px;
-            opacity: 0.18; /* Molto leggero e chiaro */
+            opacity: 0.18; /* Molto leggero e trasparente */
             pointer-events: none;
         }
 
-        /* Animazione Pulse applicata SOLO alla busta, lo sfondo resta fermo */
+        /* Pagina 1 */
+        #state-closed {
+            cursor: pointer;
+            transition: opacity 0.6s ease;
+            z-index: 10;
+        }
+
+        /* Animazione Pulse applicata SOLO alla busta chiusa */
         @keyframes pulseZoom {
             0% { transform: scale(1); }
             50% { transform: scale(1.03); }
@@ -52,15 +56,15 @@
             z-index: 2; 
         }
 
-        /* Pagina 2: Sfondo pulito senza fiori, per non sovraccaricare */
+        /* Pagina 2: Layout fisso con lo stesso sfondo fiorito leggero */
         #state-open { 
             display: none; 
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            width: 100%;
             z-index: 5;
+            opacity: 0;
+            transition: opacity 0.8s ease;
         }
 
         /* Messaggio: sale dal basso */
@@ -68,38 +72,38 @@
             width: 300px; 
             max-width: 80vw; 
             margin-bottom: 20px; 
-            opacity: 0;
             transform: translateY(80px);
-            transition: opacity 0.9s cubic-bezier(0.25, 1, 0.5, 1), transform 0.9s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: transform 0.9s cubic-bezier(0.25, 1, 0.5, 1);
+            position: relative;
+            z-index: 2;
         }
 
         /* Busta aperta */
         .envelope-open-img { 
             width: 280px; 
             max-width: 75vw; 
-            opacity: 0;
-            transition: opacity 0.8s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        #state-open.active {
+            opacity: 1;
         }
 
         #state-open.active .message-card-img {
-            opacity: 1;
             transform: translateY(0);
-        }
-
-        #state-open.active .envelope-open-img {
-            opacity: 1;
         }
     </style>
 </head>
 <body>
 
-    <!-- Pagina 1: Sfondo immobile con fiori chiari, solo la busta respira -->
-    <div id="state-closed" onclick="openLetter()">
+    <!-- Pagina 1 -->
+    <div id="state-closed" class="page-background" onclick="openLetter()">
         <img src="envelope-closed.png" id="envelope-closed" class="breathing" alt="Busta chiusa">
     </div>
 
-    <!-- Pagina 2: Pulita, senza fiori -->
-    <div id="state-open">
+    <!-- Pagina 2 (con lo stesso sfondo leggero) -->
+    <div id="state-open" class="page-background">
         <img src="message-card.png" class="message-card-img" alt="Messaggio">
         <img src="envelope-open.png" class="envelope-open-img" alt="Busta aperta">
     </div>
