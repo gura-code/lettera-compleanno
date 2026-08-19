@@ -13,7 +13,7 @@
             font-family: sans-serif;
         }
 
-        /* Pattern geometrico a rombi con i fioretti piccoli sulla prima pagina */
+        /* Pattern geometrico a rombi con la GIF del fiore sulla prima pagina */
         #state-closed {
             position: absolute;
             width: 100%; height: 100%;
@@ -24,10 +24,10 @@
             cursor: pointer;
             transition: opacity 0.6s ease;
             z-index: 10;
-            /* Crea il pattern a rombi ripetuti con il fiore (30px di dimensione per farli piccoli) */
-            background-image: url('flower.png');
+            /* Usa la GIF come pattern geometrico a rombi */
+            background-image: url('flower.gif');
             background-repeat: repeat;
-            background-size: 60px 60px; /* Distanza del ripetersi del rombo */
+            background-size: 60px 60px;
             background-position: 0 0, 30px 30px;
         }
 
@@ -93,7 +93,7 @@
 </head>
 <body>
 
-    <!-- Pagina 1 con pattern a rombi di fioretti e scritta -->
+    <!-- Pagina 1 con pattern a rombi di fioretti (GIF) e scritta -->
     <div id="state-closed" class="breathing" onclick="openLetter()">
         <div class="cover-text">Una sorpresa per te...</div>
         <img src="envelope-closed.png" id="envelope-closed" alt="Busta chiusa">
