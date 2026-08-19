@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tanti Auguri!</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #fce4ec;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .container {
+      text-align: center;
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      padding: 20px;
+    }
+
+    .envelope-box {
+      cursor: pointer;
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
+
+    .envelope-box:hover {
+      transform: scale(1.05);
+    }
+
+    .envelope-img {
+      width: 250px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .click-hint {
+      margin-top: 15px;
+      color: #d81b60;
+      font-size: 1rem;
+      font-weight: 600;
+      animation: pulse 1.5s infinite;
+    }
+
+    /* Foglio della lettera */
+    .letter-card {
+      display: none;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 25px 20px;
+      margin-top: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      border: 2px dashed #f48fb1;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease-out;
+    }
+
+    .letter-card.show {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .letter-card h1 {
+      color: #c2185b;
+      font-size: 1.6rem;
+      margin-bottom: 15px;
+    }
+
+    .letter-card p {
+      color: #4a4a4a;
+      font-size: 1rem;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.6; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.03); }
+      100% { opacity: 0.6; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Busta Cliccabile -->
+    <div class="envelope-box" id="envelopeBox" onclick="openLetter()">
+      <img id="envelopeImg" src="chiusa.png" alt="Busta Lettera" class="envelope-img">
+      <p class="click-hint" id="clickHint">✨ Clicca la busta per aprirla ✨</p>
+    </div>
+
+    <!-- Messaggio di Auguri -->
+    <div class="letter-card" id="letterCard">
+      <h1>Tanti Auguri! 🎉</h1>
+      <p>
+        Cara amica mia,
+        
+        Tanti auguri di buon compleanno! 🎈
+        Spero che questa giornata speciale ti porti tantissima felicità. 
+
+        Grazie per ogni singolo momento passato insieme! ✨
+      </p>
+    </div>
+  </div>
+
+  <script>
+    function openLetter() {
+      const img = document.getElementById('envelopeImg');
+      const hint = document.getElementById('clickHint');
+      const letter = document.getElementById('letterCard');
+      const box = document.getElementById('envelopeBox');
+
+      // Cambia immagine della busta
+      img.src = 'aperta.png';
+      
+      // Nasconde il testo di suggerimento e disabilita il click
+      hint.style.display = 'none';
+      box.onclick = null;
+      box.style.cursor = 'default';
+
+      // Mostra la lettera con effetto
+      setTimeout(() => {
+        letter.classList.add('show');
+      }, 300);
+    }
+  </script>
+
+</body>
+</html>
+
