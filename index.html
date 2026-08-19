@@ -97,6 +97,9 @@
 </head>
 <body>
 
+    <!-- File audio nascosto -->
+    <audio id="magic-sound" src="magic.mp3" preload="auto"></audio>
+
     <!-- Pagina 1 -->
     <div id="state-closed" class="page-background" onclick="openLetter()">
         <img src="envelope-closed.png" id="envelope-closed" class="breathing" alt="Busta chiusa">
@@ -110,6 +113,13 @@
 
     <script>
         function openLetter() {
+            // Fa partire l'audio del tintinnio magico
+            const sound = document.getElementById('magic-sound');
+            if (sound) {
+                sound.currentTime = 0;
+                sound.play().catch(e => console.log("Audio bloccato dal browser o file mancante"));
+            }
+
             const closed = document.getElementById('state-closed');
             const open = document.getElementById('state-open');
 
